@@ -1,0 +1,94 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true"  MasterPageFile="~/Site.master" CodeFile="User.master.cs" Inherits="Finance_User" %>
+
+<asp:Content ID="ContentHead" ContentPlaceHolderID="HeadMain" runat="Server">
+    <link href="../CSS/user.css" rel="stylesheet" type="text/css" />
+    <script language="javascript" type="text/javascript" src="../Controls/My97DatePicker/WdatePicker.js"></script>
+</asp:Content>
+<asp:Content ID="MainContent" ContentPlaceHolderID="MainContent" Runat="Server">
+    <div >
+     <div id="nav"> 
+                <ul> 
+                    <li class="first"><a href="#">个人中心</a>
+                        <ul>
+                            <li><a href="../Account/BasicInfo.aspx">基本信息</a></li>                            
+                            <li><a href="../Account/PersonalPerformanceIndex.aspx">个人考核</a></li>
+                            <li><a href="../Account/changePass.aspx">密码更改</a></li>
+                            <li><a href="../Account/ExitSafe.aspx">安全退出</a></li>
+                        </ul>
+                    </li> 
+                    <li><a href="#">财务系统</a>
+                        <ul> 
+                            <li><a href="../Finance/ApplyIndex.aspx">申报填写</a></li>   
+                            <li><a href="../Account/ApplyListPage.aspx">业务审批</a></li>                          
+                            
+                            <li><a href="../Finance/CashFlowFilter.aspx">收支报表查询</a></li>                            
+                            <li><a href="../Account/NoCashFilter.aspx">历史表单查询</a></li>
+                        </ul> 
+                    </li>                     
+                    
+                    <li><a href="#">系统设置</a>
+                       <ul>
+                           <li><a href="../Admin/PositionAdd.aspx">角色管理</a></li>
+                           <li><a href="../Admin/OrganizationIndex.aspx">组织管理</a></li>
+                           <li><a href="../Finance/ProjectAdd.aspx">新建项目</a></li>
+                           <li><a href="../Admin/UserFilter.aspx">用户管理</a></li>
+                       </ul>
+                    </li>
+                 </ul> 
+             </div>
+
+     <table>
+        <tr>          
+          <td id="LeftPane">
+              <asp:ContentPlaceHolder ID="LeftContent" runat="server">
+                  <div id="leftHead" class="modelTitle">登录信息</div>
+                  <table class="leftTable">
+                      <tr>
+                          <td>用户：</td>
+                          <td><asp:Literal ID="name" runat="server"></asp:Literal></td>
+                      </tr>
+                      <tr>
+                          <td>所属机构：</td>
+                          <td><asp:Literal ID="company" runat="server"></asp:Literal></td>
+                      </tr>
+                       <tr>
+                          <td>部门：</td>
+                          <td><asp:Literal ID="department" runat="server"></asp:Literal></td>
+                      </tr>
+                       <tr>
+                          <td>职位：</td>
+                          <td><asp:Literal ID="position" runat="server"></asp:Literal></td>
+                      </tr>
+                       <tr>
+                          <td>当前日期：</td>
+                          <td><asp:Literal ID="date" runat="server"></asp:Literal></td>
+                      </tr>
+                  </table>
+                  <div id="useful" class="modelTitle">办公常用信息</div>
+                  <table class="leftTable">
+                      <tr>
+                          <td><a href="http://www.baidu.com" target="_blank">常用网址</a></td>
+                          <td><a href="http://www.hao123.com/rili" target="_blank">万年历</a></td>
+                      </tr>
+                      <tr>
+                          <td><a href="http://www.yb21.cn/" target="_blank">邮编区号</a></td>
+                          <td><a href="http://fanyi.youdao.com/" target="_blank">在线翻译</a></td>
+                      </tr>
+                      <tr>
+                          <td><a href="http://www.weather.com.cn/weather/101010100.shtml" target="_blank">天气预报</a></td>
+                          <td><a href="https://kyfw.12306.cn/otn/leftTicket/init" target="_blank">列车时刻</a></td>
+                      </tr>
+                      <tr>
+                          <td><a href="http://map.baidu.com/" target="_blank">电子地图</a></td>
+                          <td><a href="http://flight.qunar.com/status/alphlet_order.jsp?ex_track=bd_zhixin_flighttime_title" target="_blank">航班查询</a></td>
+                      </tr>
+                  </table>
+              </asp:ContentPlaceHolder>
+          </td>
+          <td id="RightPane"><asp:ContentPlaceHolder ID="UserContent" runat="server"></asp:ContentPlaceHolder></td>
+        </tr>
+    </table>   
+
+     </div>
+
+</asp:Content>

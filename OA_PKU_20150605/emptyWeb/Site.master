@@ -1,0 +1,39 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="Site.master.cs" Inherits="Site" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link href="~/CSS/Site.css" rel="stylesheet" type="text/css" />  
+    
+    <script src="../Scripts/Validate.js" language="javascript" type="text/javascript"></script>
+    <script src="../Scripts/Util.js" language="javascript" type="text/javascript"></script>
+
+    <asp:ContentPlaceHolder ID="HeadMain" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+
+<form id="MainForm" runat="server">
+    <div class="mydiv">
+        <table id="Layout">
+            <tr>
+              <td id="Header"></td>
+            </tr>
+            <tr>
+              <td id="Container"><asp:contentplaceholder id="MainContent" runat="server"></asp:contentplaceholder></td>
+            </tr>
+            <tr>
+              <td id="Footer">北京大学地球与空间科学学院 版权所有<br />
+                Copyright &copy; School of Earth & Space Sciences, Peking University.</td>
+            </tr>
+        </table>
+    </div>
+  
+</form>
+
+
+</body>
+</html>

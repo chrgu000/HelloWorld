@@ -1,0 +1,23 @@
+1 将newReim.asp替换 将 preTepmReim.asp 替换 将 confirmReim.asp 、tempInstoreReim.asp
+-空间信息管理系统集成的研究与开发
+总管 改成部门负责人
+如何重新安装IIS，有的时候IIS出现严重错误，比如metabase坏掉，又没有备份....
+
+一般的做法，直接在控制面板添加删除程序中卸载IIS重装。
+
+这样并不是保险的做法，很多人在重装IIS后问题依旧。
+
+所以建议在任何情况下都用以下步骤重新安装IIS：
+
+1、把IIS卸载。
+2、把&nbsp;%windir%\system32\inetsrv 删除。
+3、把%windir%\iisX.log删除，X 是IIS版本。
+4、把&nbsp;\inetpub\ 目录删除。
+（以上操作可以在安全模式中进行。）
+5、重装IIS。
+
+申请转正要写那些东西呢？
+1 我学到了什么
+2 我会怎样继续我的工作。
+
+2763-300=2463  500

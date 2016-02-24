@@ -1,0 +1,41 @@
+到款分配
+	院系只有地空院和先进院
+	扣除上缴之后计入月收支一览表
+	审核顺序：会计填写-》财务负责人-》机构负责人-》管委会负责人
+工资表
+	好多人一张表，list形式
+
+关于审核：
+	像合同申请，固定资产保修申请这种，也需要会计和出纳审核。因为钱是预算的
+
+关于权限：
+	页面内也有权限管理，比如项目经理只能查询本项目的收支
+
+用于判断权限的页面名称：
+
+固定资产申购		年度项目成本概算		年度非项目成本概算
+固定资产保修		项目预算			考勤表
+出差申请		到款分配			新建项目
+出差报销		收支一览
+出差总结						
+转正申请
+加班申请
+调休申请
+请假
+离职申请
+资金使用审批
+合同审批
+宴请申请
+员工用餐申请
+统一结算申请
+车辆使用登记
+费用报销
+
+
+Users usr = (Users)Session["Identify"];
+        BasicInfo info = BasicInfo.GetBasicInfoByID(usr.UserID);
+        if(!PageAuthorityManage.hasAuthority(info,"车辆使用登记"))
+        {
+            Response.Write("<script Language='JavaScript'>alert('抱歉!您没有此操作的权限');window.location.href ='../Account/ApplyListPage.aspx'</script>");
+        }
+

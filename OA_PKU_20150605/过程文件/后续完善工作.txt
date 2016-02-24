@@ -1,0 +1,22 @@
+注册时用户名已存在
+用户名密码格式问题验证
+暂时人名，最好改成ID，避免重名
+离职功能
+多个职位兼职
+
+
+角色账户：
+
+yuangong1
+manager1
+chuna1
+kuaiji1
+bumen1
+zongguan1
+caiwu1
+jigou1
+guanwei1
+
+密码都是：111
+
+数据库新建用户：User ID=tom_oa;Password=Mxw#9891

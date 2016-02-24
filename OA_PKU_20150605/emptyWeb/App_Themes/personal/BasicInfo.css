@@ -1,0 +1,55 @@
+﻿
+.outTable {
+    margin:0 auto; 
+    width:820px; 
+    height:600px;
+    overflow:auto;
+    
+}
+.titlehead {
+    font-weight:600;
+    font-size:16px;
+    margin-left:auto;
+    margin-right:auto;
+    padding-top:20px;
+}
+.firstTable {
+    margin-left:auto;
+    margin-right:auto;
+    width:600px;  
+    margin-bottom:50px;
+}
+.innerTable {
+    border-style:hidden;
+    border-width:0px;
+}
+table
+  {
+  border-collapse:collapse;
+  }
+
+ td
+  {
+  border: 1px solid black;
+  text-align:center;
+  height:30px;
+  }
+.bold {
+    width:82px;
+}
+.diy {
+    width:150px;
+}
+.addr {
+    width:515px;
+}
+.partTwo {
+    width:220px;
+}
+.RowA {
+    background-color:#AAFFEE;
+}
+.tableHead {
+    font-weight:700;
+    background-color:#FFCC22;
+}

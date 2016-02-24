@@ -1,0 +1,1166 @@
+OA数据迁移步骤记录
+1 将reimlisttable表改变为reimlisttable_原来
+使用reimlisttable_原来表创建reimlisttable表
+将reimlisttable_原来表中的数据导入到reimlisttable表
+INSERT INTO [finance].[dbo].[reimlisttable]
+           ([stage]
+           ,[itemid]
+           ,[type]
+           ,[claimant]
+           ,[dept]
+           ,[deptleader]
+           ,[relclaimant]
+           ,[principal]
+           ,[projectDept]
+           ,[principaldeptLeader]
+           ,[finance]
+           ,[projectId]
+           ,[givecount]
+           ,[summary]
+           ,[remark]
+           ,[billCount]
+           ,[money]
+           ,[occurDate]
+           ,[reimburseDate]
+           ,[principalNotes]
+           ,[deptNotes]
+           ,[financialNotes]
+           ,[gManagerNotes]
+           ,[principalApprovalTime]
+           ,[deptApprovalTime]
+           ,[financialApprovalTime]
+           ,[gManagerApprovalTime]
+           ,[principalDissentTime]
+           ,[deptDissentTime]
+           ,[financialDissentTime]
+           ,[gManagerDissentTime]
+           ,[ch]
+           ,[notechen]
+           ,[pzh]
+           ,[signtime]
+           ,[flag]
+           ,[yue])
+	select [stage]
+           ,[itemid]
+           ,[type]
+           ,[claimant]
+           ,[dept]
+           ,[deptleader]
+           ,[relclaimant]
+           ,[principal]
+           ,[projectDept]
+           ,[principaldeptLeader]
+           ,[finance]
+           ,[projectId]
+           ,[givecount]
+           ,[summary]
+           ,[remark]
+           ,[billCount]
+           ,[money]
+           ,[occurDate]
+           ,[reimburseDate]
+           ,[principalNotes]
+           ,[deptNotes]
+           ,[financialNotes]
+           ,[gManagerNotes]
+           ,[principalApprovalTime]
+           ,[deptApprovalTime]
+           ,[financialApprovalTime]
+           ,[gManagerApprovalTime]
+           ,[principalDissentTime]
+           ,[deptDissentTime]
+           ,[financialDissentTime]
+           ,[gManagerDissentTime]
+           ,[ch]
+           ,[notechen]
+           ,[pzh]
+           ,[signtime]
+           ,[flag]
+           ,[yue]
+from reimlisttable_原来
+
+---至此 两边的数据是相同的
+
+创建reimlisttable_old表
+USE [finance]
+GO
+/****** 对象:  Table [dbo].[reimlisttable]    脚本日期: 03/28/2014 14:18:51 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[reimlisttable_old](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[itemid] [int] NULL,
+	[type] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[claimant] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[dept] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[deptleader] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[relclaimant] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[principal] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[projectDept] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[principaldeptLeader] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[finance] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[projectId] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[givecount] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[summary] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[remark] [nvarchar](max) COLLATE Chinese_PRC_CI_AS NULL,
+	[billCount] [int] NULL,
+	[money] [numeric](18, 2) NULL,
+	[occurDate] [datetime] NULL,
+	[reimburseDate] [datetime] NULL,
+	[stage] [int] NULL,
+	[principalNotes] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[deptNotes] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[financialNotes] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[gManagerNotes] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[principalApprovalTime] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[deptApprovalTime] [datetime] NULL,
+	[financialApprovalTime] [datetime] NULL,
+	[gManagerApprovalTime] [datetime] NULL,
+	[principalDissentTime] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[deptDissentTime] [datetime] NULL,
+	[financialDissentTime] [datetime] NULL,
+	[gManagerDissentTime] [datetime] NULL,
+	[ch] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[notechen] [nvarchar](max) COLLATE Chinese_PRC_CI_AS NULL,
+	[pzh] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[signtime] [datetime] NULL,
+	[flag] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[yue] [real] NULL
+) ON [PRIMARY]
+
+
+第二步 	将reimlisttable表中老的数据、无效的数据、已经处理完的数据库，迁移到reimlisttable_old表
+	同时在reimlisttable表中将这些数据库删除，在reimlisttable_old表中将无效数据删除。
+
+**处理无效数据**
+创建一个reimlisttable_del表，并将reimlisttable表中的无效数据迁移到这个表中
+USE [finance]
+GO
+/****** 对象:  Table [dbo].[reimlisttable]    脚本日期: 03/28/2014 14:22:34 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[reimlisttable_del](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[itemid] [int] NULL,
+	[type] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[claimant] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[dept] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[deptleader] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[relclaimant] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[principal] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[projectDept] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[principaldeptLeader] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[finance] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[projectId] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[givecount] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[summary] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[remark] [nvarchar](max) COLLATE Chinese_PRC_CI_AS NULL,
+	[billCount] [int] NULL,
+	[money] [numeric](18, 2) NULL,
+	[occurDate] [datetime] NULL,
+	[reimburseDate] [datetime] NULL,
+	[stage] [int] NULL,
+	[principalNotes] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[deptNotes] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[financialNotes] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[gManagerNotes] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[principalApprovalTime] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[deptApprovalTime] [datetime] NULL,
+	[financialApprovalTime] [datetime] NULL,
+	[gManagerApprovalTime] [datetime] NULL,
+	[principalDissentTime] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[deptDissentTime] [datetime] NULL,
+	[financialDissentTime] [datetime] NULL,
+	[gManagerDissentTime] [datetime] NULL,
+	[ch] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[notechen] [nvarchar](max) COLLATE Chinese_PRC_CI_AS NULL,
+	[pzh] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[signtime] [datetime] NULL,
+	[flag] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[yue] [real] NULL
+) ON [PRIMARY]
+
+
+
+INSERT INTO [finance].[dbo].[reimlisttable_del]
+           ([stage]
+           ,[itemid]
+           ,[type]
+           ,[claimant]
+           ,[dept]
+           ,[deptleader]
+           ,[relclaimant]
+           ,[principal]
+           ,[projectDept]
+           ,[principaldeptLeader]
+           ,[finance]
+           ,[projectId]
+           ,[givecount]
+           ,[summary]
+           ,[remark]
+           ,[billCount]
+           ,[money]
+           ,[occurDate]
+           ,[reimburseDate]
+           ,[principalNotes]
+           ,[deptNotes]
+           ,[financialNotes]
+           ,[gManagerNotes]
+           ,[principalApprovalTime]
+           ,[deptApprovalTime]
+           ,[financialApprovalTime]
+           ,[gManagerApprovalTime]
+           ,[principalDissentTime]
+           ,[deptDissentTime]
+           ,[financialDissentTime]
+           ,[gManagerDissentTime]
+           ,[ch]
+           ,[notechen]
+           ,[pzh]
+           ,[signtime]
+           ,[flag]
+           ,[yue])
+	select [stage]
+           ,[itemid]
+           ,[type]
+           ,[claimant]
+           ,[dept]
+           ,[deptleader]
+           ,[relclaimant]
+           ,[principal]
+           ,[projectDept]
+           ,[principaldeptLeader]
+           ,[finance]
+           ,[projectId]
+           ,[givecount]
+           ,[summary]
+           ,[remark]
+           ,[billCount]
+           ,[money]
+           ,[occurDate]
+           ,[reimburseDate]
+           ,[principalNotes]
+           ,[deptNotes]
+           ,[financialNotes]
+           ,[gManagerNotes]
+           ,[principalApprovalTime]
+           ,[deptApprovalTime]
+           ,[financialApprovalTime]
+           ,[gManagerApprovalTime]
+           ,[principalDissentTime]
+           ,[deptDissentTime]
+           ,[financialDissentTime]
+           ,[gManagerDissentTime]
+           ,[ch]
+           ,[notechen]
+           ,[pzh]
+           ,[signtime]
+           ,[flag]
+           ,[yue]
+from reimlisttable where stage in (0,10,14,15,66)
+
+并在reimlisttable表中删除这些数据
+delete from reimlisttable where stage in (0,10,14,15,66);
+
+将未完成的，但是报销人已经不在本公司的数据 迁移到reimlisttable_del表
+SELECT * FROM [finance].[dbo].[reimlisttable] where [claimant] not in (select [username] from 
+[lmtof].[dbo].[userinf] where forbid='no') and stage in (1,2,3,4,5,6,7);
+
+
+INSERT INTO [finance].[dbo].[reimlisttable_del]
+           ([stage]
+           ,[itemid]
+           ,[type]
+           ,[claimant]
+           ,[dept]
+           ,[deptleader]
+           ,[relclaimant]
+           ,[principal]
+           ,[projectDept]
+           ,[principaldeptLeader]
+           ,[finance]
+           ,[projectId]
+           ,[givecount]
+           ,[summary]
+           ,[remark]
+           ,[billCount]
+           ,[money]
+           ,[occurDate]
+           ,[reimburseDate]
+           ,[principalNotes]
+           ,[deptNotes]
+           ,[financialNotes]
+           ,[gManagerNotes]
+           ,[principalApprovalTime]
+           ,[deptApprovalTime]
+           ,[financialApprovalTime]
+           ,[gManagerApprovalTime]
+           ,[principalDissentTime]
+           ,[deptDissentTime]
+           ,[financialDissentTime]
+           ,[gManagerDissentTime]
+           ,[ch]
+           ,[notechen]
+           ,[pzh]
+           ,[signtime]
+           ,[flag]
+           ,[yue])
+	select [stage]
+           ,[itemid]
+           ,[type]
+           ,[claimant]
+           ,[dept]
+           ,[deptleader]
+           ,[relclaimant]
+           ,[principal]
+           ,[projectDept]
+           ,[principaldeptLeader]
+           ,[finance]
+           ,[projectId]
+           ,[givecount]
+           ,[summary]
+           ,[remark]
+           ,[billCount]
+           ,[money]
+           ,[occurDate]
+           ,[reimburseDate]
+           ,[principalNotes]
+           ,[deptNotes]
+           ,[financialNotes]
+           ,[gManagerNotes]
+           ,[principalApprovalTime]
+           ,[deptApprovalTime]
+           ,[financialApprovalTime]
+           ,[gManagerApprovalTime]
+           ,[principalDissentTime]
+           ,[deptDissentTime]
+           ,[financialDissentTime]
+           ,[gManagerDissentTime]
+           ,[ch]
+           ,[notechen]
+           ,[pzh]
+           ,[signtime]
+           ,[flag]
+           ,[yue]
+from reimlisttable where [claimant] not in (select [username] from 
+[lmtof].[dbo].[userinf] where forbid='no') and stage in (1,2,3,4,5,6,7);
+
+
+在reimlisttable中删除这些数据
+delete from reimlisttable where [claimant] not in (select [username] from 
+[lmtof].[dbo].[userinf] where forbid='no') and stage in (1,2,3,4,5,6,7);
+
+**处理无效数据**
+
+**处理老的数据**
+检查2014年以前的数据---老的数据
+select * from reimlisttable where [occurDate] < '2014-01-01'
+将这部分数据迁移到 reimlisttable_old表
+
+INSERT INTO [finance].[dbo].[reimlisttable_old]
+           ([stage]
+           ,[itemid]
+           ,[type]
+           ,[claimant]
+           ,[dept]
+           ,[deptleader]
+           ,[relclaimant]
+           ,[principal]
+           ,[projectDept]
+           ,[principaldeptLeader]
+           ,[finance]
+           ,[projectId]
+           ,[givecount]
+           ,[summary]
+           ,[remark]
+           ,[billCount]
+           ,[money]
+           ,[occurDate]
+           ,[reimburseDate]
+           ,[principalNotes]
+           ,[deptNotes]
+           ,[financialNotes]
+           ,[gManagerNotes]
+           ,[principalApprovalTime]
+           ,[deptApprovalTime]
+           ,[financialApprovalTime]
+           ,[gManagerApprovalTime]
+           ,[principalDissentTime]
+           ,[deptDissentTime]
+           ,[financialDissentTime]
+           ,[gManagerDissentTime]
+           ,[ch]
+           ,[notechen]
+           ,[pzh]
+           ,[signtime]
+           ,[flag]
+           ,[yue])
+	select [stage]
+           ,[itemid]
+           ,[type]
+           ,[claimant]
+           ,[dept]
+           ,[deptleader]
+           ,[relclaimant]
+           ,[principal]
+           ,[projectDept]
+           ,[principaldeptLeader]
+           ,[finance]
+           ,[projectId]
+           ,[givecount]
+           ,[summary]
+           ,[remark]
+           ,[billCount]
+           ,[money]
+           ,[occurDate]
+           ,[reimburseDate]
+           ,[principalNotes]
+           ,[deptNotes]
+           ,[financialNotes]
+           ,[gManagerNotes]
+           ,[principalApprovalTime]
+           ,[deptApprovalTime]
+           ,[financialApprovalTime]
+           ,[gManagerApprovalTime]
+           ,[principalDissentTime]
+           ,[deptDissentTime]
+           ,[financialDissentTime]
+           ,[gManagerDissentTime]
+           ,[ch]
+           ,[notechen]
+           ,[pzh]
+           ,[signtime]
+           ,[flag]
+           ,[yue]
+from reimlisttable where [occurDate] < '2014-01-01'
+
+将这部分数据从reimlisttable中删除
+delete reimlisttable where [occurDate] < '2014-01-01'
+
+---------------至此 数据分离完成-----
+------下面进行数据再处理------------
+reimlisttable表部分
+1 添加新的字段
+[projectdeptcode] nvarchar(20)
+[claimantdeptcode] nvarchar(20)
+[relclaimantdeptcode] nvarchar(20)
+[haveverify] nvarchar(MAX)
+[nowverify] nvarchar(MAX)
+[willverify] nvarchar(MAX)
+[notes] nvarchar(MAX)
+[dealtype] nvarchar(20)
+[chkormn] nvarchar(20)
+
+2 项目信息表
+需要建立一个_old表以便于后面的铺垫工作
+项目信息表结构已经检查完毕 不需要修改
+但是内容需要在程序上进行调整
+USE [GFProjectType]
+GO
+/****** 对象:  Table [dbo].[projectType]    脚本日期: 03/28/2014 19:21:29 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[projectType_old](
+	[projectId] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[type] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[dept] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[financeCount] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[projectName] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[principal1] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[principal2] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+) ON [PRIMARY]
+
+INSERT INTO [GFProjectType].[dbo].[projectType_old]
+           ([projectId]
+           ,[type]
+           ,[dept]
+           ,[financeCount]
+           ,[projectName]
+           ,[principal1]
+           ,[principal2])
+     select 
+           [projectId]
+           ,[type]
+           ,[dept]
+           ,[financeCount]
+           ,[projectName]
+           ,[principal1]
+           ,[principal2]
+	from [GFProjectType].[dbo].[projectType]
+
+在projectType表中建立一个标识解题项目的字段
+jieti nvarchar(20) default(NO)
+update projecttype set jieti='NO'
+
+
+3 部门表 和 人员信息表字段修改
+部门表结构已经检查完毕 不需要修改
+
+创建_old表 为后续工作做铺垫
+USE [lmtof]
+GO
+/****** 对象:  Table [dbo].[userinf]    脚本日期: 03/28/2014 16:16:24 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[userinf_old](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[name] [nvarchar](10) COLLATE Chinese_PRC_CI_AS NULL,
+	[epassserialnumber] [nvarchar](16) COLLATE Chinese_PRC_CI_AS NULL,
+	[username] [nvarchar](10) COLLATE Chinese_PRC_CI_AS NULL,
+	[password] [nvarchar](20) COLLATE Chinese_PRC_CI_AS NULL,
+	[userdept] [nvarchar](40) COLLATE Chinese_PRC_CI_AS NULL,
+	[userlevel] [nvarchar](40) COLLATE Chinese_PRC_CI_AS NULL,
+	[levelCode] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[levelCode1] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[levelCode2] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[Utime] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[slrlevel] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[forbid] [nvarchar](5) COLLATE Chinese_PRC_CI_AS NULL,
+	[seenotice] [nvarchar](5) COLLATE Chinese_PRC_CI_AS NULL,
+	[allow_see_all_workrep] [nvarchar](5) COLLATE Chinese_PRC_CI_AS NULL,
+	[allow_see_dept_workrep] [nvarchar](5) COLLATE Chinese_PRC_CI_AS NULL,
+	[allow_write_complan] [nvarchar](5) COLLATE Chinese_PRC_CI_AS NULL,
+	[allow_control_dept_user] [nvarchar](5) COLLATE Chinese_PRC_CI_AS NULL,
+	[allow_control_all_user] [nvarchar](5) COLLATE Chinese_PRC_CI_AS NULL,
+	[allow_send_note] [nvarchar](5) COLLATE Chinese_PRC_CI_AS NULL,
+	[allow_control_note] [nvarchar](5) COLLATE Chinese_PRC_CI_AS NULL,
+	[allow_send_file] [nvarchar](5) COLLATE Chinese_PRC_CI_AS NULL,
+	[allow_transmit_file] [nvarchar](5) COLLATE Chinese_PRC_CI_AS NULL,
+	[allow_control_file] [nvarchar](5) COLLATE Chinese_PRC_CI_AS NULL,
+	[allow_write_stafinf] [nvarchar](5) COLLATE Chinese_PRC_CI_AS NULL,
+	[allow_control_level] [nvarchar](5) COLLATE Chinese_PRC_CI_AS NULL,
+	[allow_edit_person_personinf] [nvarchar](5) COLLATE Chinese_PRC_CI_AS NULL,
+	[allow_edit_all_personinf] [nvarchar](5) COLLATE Chinese_PRC_CI_AS NULL,
+	[allow_see_all_personinf] [nvarchar](5) COLLATE Chinese_PRC_CI_AS NULL,
+	[allow_see_dept_personinf] [nvarchar](5) COLLATE Chinese_PRC_CI_AS NULL,
+	[allow_edit_all_jobchanginf] [nvarchar](5) COLLATE Chinese_PRC_CI_AS NULL,
+	[allow_edit_dept_jobchanginf] [nvarchar](5) COLLATE Chinese_PRC_CI_AS NULL,
+	[allow_edit_all_rewpuninf] [nvarchar](5) COLLATE Chinese_PRC_CI_AS NULL,
+	[allow_edit_dept_rewpuninf] [nvarchar](5) COLLATE Chinese_PRC_CI_AS NULL,
+	[allow_edit_all_checkinf] [nvarchar](5) COLLATE Chinese_PRC_CI_AS NULL,
+	[allow_edit_dept_checkinf] [nvarchar](5) COLLATE Chinese_PRC_CI_AS NULL,
+	[allow_edit_all_wageinf] [nvarchar](5) COLLATE Chinese_PRC_CI_AS NULL,
+	[allow_edit_dept_wageinf] [nvarchar](5) COLLATE Chinese_PRC_CI_AS NULL,
+	[allow_edit_person_addressinf] [nvarchar](5) COLLATE Chinese_PRC_CI_AS NULL,
+	[allow_edit_dept_addressinf] [nvarchar](5) COLLATE Chinese_PRC_CI_AS NULL,
+	[allow_edit_all_addressinf] [nvarchar](5) COLLATE Chinese_PRC_CI_AS NULL,
+	[allow_edit_client_addressinf] [nvarchar](5) COLLATE Chinese_PRC_CI_AS NULL,
+	[allow_see_job] [nvarchar](5) COLLATE Chinese_PRC_CI_AS NULL,
+	[allow_edit_work_time] [nvarchar](5) COLLATE Chinese_PRC_CI_AS NULL,
+	[allow_look_all_kq_info] [nvarchar](5) COLLATE Chinese_PRC_CI_AS NULL,
+	[allow_add_resource] [nvarchar](5) COLLATE Chinese_PRC_CI_AS NULL,
+	[allow_check_resource_requirement] [nvarchar](5) COLLATE Chinese_PRC_CI_AS NULL,
+	[allow_manage_workthings] [nvarchar](5) COLLATE Chinese_PRC_CI_AS NULL,
+	[allow_auditing_workthings] [nvarchar](5) COLLATE Chinese_PRC_CI_AS NULL,
+	[allow_lookallinfo_workthings] [nvarchar](5) COLLATE Chinese_PRC_CI_AS NULL,
+	[allow_manage_docstoreroom] [nvarchar](5) COLLATE Chinese_PRC_CI_AS NULL,
+	[allow_manage_help] [nvarchar](5) COLLATE Chinese_PRC_CI_AS NULL,
+	[joindate] [datetime] NULL,
+	[i] [int] NULL,
+	[allow_repair_system] [nvarchar](5) COLLATE Chinese_PRC_CI_AS NULL,
+	[allow_slr_pay] [nchar](10) COLLATE Chinese_PRC_CI_AS NULL  DEFAULT ('yes'),
+	[arearage] [real] NULL  DEFAULT ((0))
+) ON [PRIMARY]
+
+
+
+INSERT INTO [lmtof].[dbo].[userinf_old]
+           ([name]
+           ,[epassserialnumber]
+           ,[username]
+           ,[password]
+           ,[userdept]
+           ,[userlevel]
+           ,[levelCode]
+           ,[levelCode1]
+           ,[levelCode2]
+           ,[Utime]
+           ,[slrlevel]
+           ,[forbid]
+           ,[seenotice]
+           ,[allow_see_all_workrep]
+           ,[allow_see_dept_workrep]
+           ,[allow_write_complan]
+           ,[allow_control_dept_user]
+           ,[allow_control_all_user]
+           ,[allow_send_note]
+           ,[allow_control_note]
+           ,[allow_send_file]
+           ,[allow_transmit_file]
+           ,[allow_control_file]
+           ,[allow_write_stafinf]
+           ,[allow_control_level]
+           ,[allow_edit_person_personinf]
+           ,[allow_edit_all_personinf]
+           ,[allow_see_all_personinf]
+           ,[allow_see_dept_personinf]
+           ,[allow_edit_all_jobchanginf]
+           ,[allow_edit_dept_jobchanginf]
+           ,[allow_edit_all_rewpuninf]
+           ,[allow_edit_dept_rewpuninf]
+           ,[allow_edit_all_checkinf]
+           ,[allow_edit_dept_checkinf]
+           ,[allow_edit_all_wageinf]
+           ,[allow_edit_dept_wageinf]
+           ,[allow_edit_person_addressinf]
+           ,[allow_edit_dept_addressinf]
+           ,[allow_edit_all_addressinf]
+           ,[allow_edit_client_addressinf]
+           ,[allow_see_job]
+           ,[allow_edit_work_time]
+           ,[allow_look_all_kq_info]
+           ,[allow_add_resource]
+           ,[allow_check_resource_requirement]
+           ,[allow_manage_workthings]
+           ,[allow_auditing_workthings]
+           ,[allow_lookallinfo_workthings]
+           ,[allow_manage_docstoreroom]
+           ,[allow_manage_help]
+           ,[joindate]
+           ,[i]
+           ,[allow_repair_system]
+           ,[allow_slr_pay]
+           ,[arearage])
+     select
+           [name]
+           ,[epassserialnumber]
+           ,[username]
+           ,[password]
+           ,[userdept]
+           ,[userlevel]
+           ,[levelCode]
+           ,[levelCode1]
+           ,[levelCode2]
+           ,[Utime]
+           ,[slrlevel]
+           ,[forbid]
+           ,[seenotice]
+           ,[allow_see_all_workrep]
+           ,[allow_see_dept_workrep]
+           ,[allow_write_complan]
+           ,[allow_control_dept_user]
+           ,[allow_control_all_user]
+           ,[allow_send_note]
+           ,[allow_control_note]
+           ,[allow_send_file]
+           ,[allow_transmit_file]
+           ,[allow_control_file]
+           ,[allow_write_stafinf]
+           ,[allow_control_level]
+           ,[allow_edit_person_personinf]
+           ,[allow_edit_all_personinf]
+           ,[allow_see_all_personinf]
+           ,[allow_see_dept_personinf]
+           ,[allow_edit_all_jobchanginf]
+           ,[allow_edit_dept_jobchanginf]
+           ,[allow_edit_all_rewpuninf]
+           ,[allow_edit_dept_rewpuninf]
+           ,[allow_edit_all_checkinf]
+           ,[allow_edit_dept_checkinf]
+           ,[allow_edit_all_wageinf]
+           ,[allow_edit_dept_wageinf]
+           ,[allow_edit_person_addressinf]
+           ,[allow_edit_dept_addressinf]
+           ,[allow_edit_all_addressinf]
+           ,[allow_edit_client_addressinf]
+           ,[allow_see_job]
+           ,[allow_edit_work_time]
+           ,[allow_look_all_kq_info]
+           ,[allow_add_resource]
+           ,[allow_check_resource_requirement]
+           ,[allow_manage_workthings]
+           ,[allow_auditing_workthings]
+           ,[allow_lookallinfo_workthings]
+           ,[allow_manage_docstoreroom]
+           ,[allow_manage_help]
+           ,[joindate]
+           ,[i]
+           ,[allow_repair_system]
+           ,[allow_slr_pay]
+           ,[arearage]
+from userinf
+
+
+dept_old为手工录入。
+
+
+
+*********************开始处理借支表******************************
+建立borrowlist_原来表--手动改名
+使用borrowlist_原来表建立borrowlist表，并填充数据
+USE [finance]
+GO
+/****** 对象:  Table [dbo].[borrowlist_原来]    脚本日期: 03/28/2014 16:38:10 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[borrowlist](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[borrower] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[dept] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[finance] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[date] [datetime] NULL,
+	[borrowTime] [datetime] NULL,
+	[repayTime] [datetime] NULL,
+	[money] [decimal](18, 0) NULL,
+	[content] [nvarchar](max) COLLATE Chinese_PRC_CI_AS NULL,
+	[stage] [int] NULL,
+	[deptNotes] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[financialNotes] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[gManagerNotes] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[deptApprovalTime] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[financialApprovalTime] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[gManagerApprovalTime] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[deptDissentTime] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[financialDissentTime] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[gManagerDissentTime] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[pzh] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[signtime] [datetime] NULL,
+	[frefound] [decimal](18, 0) NULL  DEFAULT ((0.00)),
+	[srefound] [decimal](18, 0) NULL  DEFAULT ((0.00)),
+	[trefound] [decimal](18, 0) NULL DEFAULT ((0.00)),
+	[fretime] [datetime] NULL,
+	[sretime] [datetime] NULL,
+	[tretime] [datetime] NULL
+) ON [PRIMARY]
+
+
+INSERT INTO [finance].[dbo].[borrowlist]
+           ([borrower]
+           ,[dept]
+           ,[finance]
+           ,[date]
+           ,[borrowTime]
+           ,[repayTime]
+           ,[money]
+           ,[content]
+           ,[stage]
+           ,[deptNotes]
+           ,[financialNotes]
+           ,[gManagerNotes]
+           ,[deptApprovalTime]
+           ,[financialApprovalTime]
+           ,[gManagerApprovalTime]
+           ,[deptDissentTime]
+           ,[financialDissentTime]
+           ,[gManagerDissentTime]
+           ,[pzh]
+           ,[signtime]
+           ,[frefound]
+           ,[srefound]
+           ,[trefound]
+           ,[fretime]
+           ,[sretime]
+           ,[tretime])
+     select
+           [borrower]
+           ,[dept]
+           ,[finance]
+           ,[date]
+           ,[borrowTime]
+           ,[repayTime]
+           ,[money]
+           ,[content]
+           ,[stage]
+           ,[deptNotes]
+           ,[financialNotes]
+           ,[gManagerNotes]
+           ,[deptApprovalTime]
+           ,[financialApprovalTime]
+           ,[gManagerApprovalTime]
+           ,[deptDissentTime]
+           ,[financialDissentTime]
+           ,[gManagerDissentTime]
+           ,[pzh]
+           ,[signtime]
+           ,[frefound]
+           ,[srefound]
+           ,[trefound]
+           ,[fretime]
+           ,[sretime]
+           ,[tretime]
+from borrowlist_原来
+
+使用borrowlist创建表borrowlist_old表--将无效的、老的数据（2013年之前的）都迁移到这个表
+USE [finance]
+GO
+/****** 对象:  Table [dbo].[borrowlist_原来]    脚本日期: 03/28/2014 16:38:10 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[borrowlist_old](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[borrower] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[dept] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[finance] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[date] [datetime] NULL,
+	[borrowTime] [datetime] NULL,
+	[repayTime] [datetime] NULL,
+	[money] [decimal](18, 0) NULL,
+	[content] [nvarchar](max) COLLATE Chinese_PRC_CI_AS NULL,
+	[stage] [int] NULL,
+	[deptNotes] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[financialNotes] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[gManagerNotes] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[deptApprovalTime] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[financialApprovalTime] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[gManagerApprovalTime] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[deptDissentTime] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[financialDissentTime] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[gManagerDissentTime] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[pzh] [nvarchar](50) COLLATE Chinese_PRC_CI_AS NULL,
+	[signtime] [datetime] NULL,
+	[frefound] [decimal](18, 0) NULL  DEFAULT ((0.00)),
+	[srefound] [decimal](18, 0) NULL  DEFAULT ((0.00)),
+	[trefound] [decimal](18, 0) NULL DEFAULT ((0.00)),
+	[fretime] [datetime] NULL,
+	[sretime] [datetime] NULL,
+	[tretime] [datetime] NULL
+) ON [PRIMARY]
+
+
+找到老的数据
+SELECT *
+  FROM [finance].[dbo].[borrowlist] where [borrowTime] < '2014-01-01'
+
+向borrowlist_old表插入老的数据
+INSERT INTO [finance].[dbo].[borrowlist_old]
+           ([borrower]
+           ,[dept]
+           ,[finance]
+           ,[date]
+           ,[borrowTime]
+           ,[repayTime]
+           ,[money]
+           ,[content]
+           ,[stage]
+           ,[deptNotes]
+           ,[financialNotes]
+           ,[gManagerNotes]
+           ,[deptApprovalTime]
+           ,[financialApprovalTime]
+           ,[gManagerApprovalTime]
+           ,[deptDissentTime]
+           ,[financialDissentTime]
+           ,[gManagerDissentTime]
+           ,[pzh]
+           ,[signtime]
+           ,[frefound]
+           ,[srefound]
+           ,[trefound]
+           ,[fretime]
+           ,[sretime]
+           ,[tretime])
+     select
+           [borrower]
+           ,[dept]
+           ,[finance]
+           ,[date]
+           ,[borrowTime]
+           ,[repayTime]
+           ,[money]
+           ,[content]
+           ,[stage]
+           ,[deptNotes]
+           ,[financialNotes]
+           ,[gManagerNotes]
+           ,[deptApprovalTime]
+           ,[financialApprovalTime]
+           ,[gManagerApprovalTime]
+           ,[deptDissentTime]
+           ,[financialDissentTime]
+           ,[gManagerDissentTime]
+           ,[pzh]
+           ,[signtime]
+           ,[frefound]
+           ,[srefound]
+           ,[trefound]
+           ,[fretime]
+           ,[sretime]
+           ,[tretime]
+from borrowlist where [borrowTime] < '2014-01-01'
+
+在borrowlist中删除这些表
+
+delete from borrowlist where [borrowTime] < '2014-01-01'
+
+处理borrowlist的表结构
+增加如下列
+projectid 		nvarchar(50)
+projectdeptcode		nvarchar(50)
+borrowerdeptcode	nvarchar(50)
+asktime			datetime
+haveverify		nvarchar(max)
+nowverify		nvarchar(max)
+willverify		nvarchar(max)
+notes			nvarchar(max)
+
+
+
+------至此数据表结构已经处理完毕
+------下面开始在程序上修改借支表和报销表上的字段
+阶段	代表的含义
+
+1	至项目负责人或部门经理，等待审批
+3	至财务主管，等待财务主管审批
+5	至会计调整
+7	至出纳，可以联系出纳
+8	至会计做表（处理完毕）
+10	表单没有通过
+
+
+报销表：
+projectdeptcode、claimantdeptcode 、relclaimantdeptcode、haveverify、nowverify、willverify、notes、dealtype、chkormn
+阶段	统计
+1	13
+5	24
+7	1
+8	128
+
+
+
+借支表：
+projectid、projectdeptcode、borrowerdeptcode、asktime、haveverify、nowverify、willverify、notes
+阶段	统计
+3	3
+10	3
+
+
+做之前将整个数据库做一次备份 准备下程序更新
+a.更新项目表
+UPDATE [GFProjectType].[dbo].[projectType]
+   SET [jieti] = 'yes'
+ WHERE [projectId] in 
+	('GC11PU003 ',
+'CP07FW001',
+'CP08FW001',
+'CP08FW002',
+'CP-GF',
+'CDJD-GF',
+'GC09PU002',
+'GC-GF',
+'GC07FW001',
+'GC02FW001',
+'GC02PU001',
+'JP10PU001',
+'JP-GF',
+'JP08OS001',
+'JP08OS002',
+'JP08PU003',
+'JP08OS004',
+'JP09OS001',
+'JP09OS002',
+'JP09OS003',
+'JP09OS004',
+'JP09OS005',
+'CD09PU001',
+'CD09PU002',
+'FSW09PU002',
+'FSW11PU001',
+'FSW09PU004',
+'YW11PU003',
+'YW09PU003',
+'YW09PU001',
+'GF08PU001',
+'YW-GF',
+'YW08FW001',
+'YW08FW003',
+'YW08FW005',
+'ZG08GF001',
+'ZG09PU001',
+'ZG12PU003',
+'ZG12PU004',
+'ZG10PU002',
+'ZG11PU001',
+'ZG12PU002',
+'GC08PU001',
+'JP13PU001',
+'ZG12PU001',
+'YF09PU001',
+'YF09PU003',
+'ZG-GF')
+
+UPDATE [GFProjectType].[dbo].[projectType]
+   SET [jieti] = 'YES'
+ WHERE [projectId]='YW09PU004'
+
+UPDATE [GFProjectType].[dbo].[projectType]
+   SET [jieti] = 'YES'
+ WHERE [projectId]='ZG10PU001-DCDF2010'
+
+UPDATE [GFProjectType].[dbo].[projectType]
+   SET [jieti] = 'YES'
+ WHERE [projectId]='YW11PU001'   ---2个项目
+
+UPDATE [GFProjectType].[dbo].[projectType]
+   SET [dept] = '教育培训部'
+ WHERE [projectId]='JP10PU001' and jieti='N0'
+
+UPDATE [GFProjectType].[dbo].[projectType]
+   SET [jieti] = 'YES'
+ WHERE [projectId]='YW09PU002'
+
+
+剩下的就是现在正在使用的项目了，需要对他们进行部门的更新
+
+FSW==数字流域
+
+YF13PU004--》FSW13PU004
+YF13FW001--》FSW13FW001
+YF13PU006--》FSW13PU006
+YF13FW007--》FSW13PU007
+YW11PU002--》FSW11PU002
+YW12PU001--》FSW12PU001
+YF13PU005--》FSW13PU005
+
+由于这几个项目编号发生了变化，所以需要改动报销表中的projectid
+SELECT [id]
+      ,[itemid]
+      ,[type]
+      ,[claimant]
+      ,[dept]
+      ,[deptleader]
+      ,[relclaimant]
+      ,[principal]
+      ,[projectDept]
+      ,[principaldeptLeader]
+      ,[finance]
+      ,[projectId]
+      ,[givecount]
+      ,[summary]
+      ,[remark]
+      ,[billCount]
+      ,[money]
+      ,[occurDate]
+      ,[reimburseDate]
+      ,[stage]
+      ,[principalNotes]
+      ,[deptNotes]
+      ,[financialNotes]
+      ,[gManagerNotes]
+      ,[principalApprovalTime]
+      ,[deptApprovalTime]
+      ,[financialApprovalTime]
+      ,[gManagerApprovalTime]
+      ,[principalDissentTime]
+      ,[deptDissentTime]
+      ,[financialDissentTime]
+      ,[gManagerDissentTime]
+      ,[ch]
+      ,[notechen]
+      ,[pzh]
+      ,[signtime]
+      ,[flag]
+      ,[yue]
+      ,[projectdeptcode]
+      ,[claimantdeptcode]
+      ,[relclaimantdeptcode]
+      ,[haveverify]
+      ,[nowverify]
+      ,[willverify]
+      ,[notes]
+      ,[dealtype]
+      ,[chkormn]
+  FROM [finance].[dbo].[reimlisttable] where [projectId] in
+	('YF13PU004',
+'YF13FW001',
+'YF13PU006',
+'YF13FW007',
+'YW11PU002',
+'YW12PU001',
+'YF13PU005')
+
+
+
+
+查到 只有YF13PU004，YF13PU005 这两个项目有报销
+所以更改
+
+UPDATE [finance].[dbo].[reimlisttable]
+   SET [projectId] = 'FSW13PU004'
+ WHERE [projectId] ='YF13PU004'
+
+UPDATE [finance].[dbo].[reimlisttable]
+   SET [projectId] = 'FSW13PU005'
+ WHERE [projectId] ='YF13PU005'
+
+---共计4行数据被修改
+
+UPDATE [GFProjectType].[dbo].[projectType]
+   SET [projectId] ='FSW13PU004'
+ WHERE [projectId] ='YF13PU004'
+
+UPDATE [GFProjectType].[dbo].[projectType]
+   SET [projectId] ='FSW13FW001'
+ WHERE [projectId] ='YF13FW001'
+
+UPDATE [GFProjectType].[dbo].[projectType]
+   SET [projectId] ='FSW13PU006'
+ WHERE [projectId] ='YF13PU006'
+
+UPDATE [GFProjectType].[dbo].[projectType]
+   SET [projectId] ='FSW13FW007'
+ WHERE [projectId] ='YF13FW007'
+
+
+---借支表中没有这些项目的信息
+-------至此项目信息已经编制完毕
+开始准备程序【回家处理】
+
+报销表：
+projectdeptcode、claimantdeptcode 、relclaimantdeptcode、haveverify、nowverify、willverify、notes、dealtype、chkormn
+阶段	统计
+1	13
+5	24
+7	1
+8	128
+
+做之前 进行一次数据备份
+
+通过[reimlisttable]的id 定位到每个记录
+	获得实际报销人，获得实际报销人部门编号 
+		updaterrelcd(iid) == relclaimantdeptcode、
+	获得记录中的报销人可以得到报销人的部门编号， 
+		updatecd(iid) == claimantdeptcode
+	获得项目编号，可以得到项目的部门编号 
+		updatepdc(iid)  == projectdeptcode
+	通过projectid+stage 可创造出相应阶段的haveverify、nowverify、willverify、notes和dealtype=AA
+		updateverify(iid) ---haveverify、nowverify、willverify
+		updatenotes(iid)
+	根据stage和项目信息来获得chkormn---应该都是一样的==
+
+		updatedealandchk(iid)  --dealtype,chkormn
+UPDATE [finance].[dbo].[reimlisttable]
+   SET [projectId] = 'FSW13PU004'
+ WHERE [projectId] = 'FSW13PU005'
+
+UPDATE [finance].[dbo].[reimlisttable]
+   SET [projectId] = 'FSW11PU001'
+ WHERE [projectId] = 'YW11PU001'
+
+UPDATE [finance].[dbo].[reimlisttable]
+   SET principal = '许琳'
+ WHERE id=4943
+
+
+
+借支表：
+projectid、projectdeptcode、borrowerdeptcode、asktime、haveverify、nowverify、willverify、notes
+阶段	统计
+3	3
+10	3
+---6条数据 手动编辑吧
+
+
+
+
