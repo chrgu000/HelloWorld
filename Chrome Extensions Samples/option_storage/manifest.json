@@ -1,0 +1,12 @@
+{
+	"name": "My extension",
+	"manifest_version":2,
+	"version":"1.0.0",
+	"version_name":"1.0.0 beta",
+	"description":"To config options and storage it",
+	
+	"options_page": "options.html",
+	"permissions":[
+		"storage"
+	]
+}

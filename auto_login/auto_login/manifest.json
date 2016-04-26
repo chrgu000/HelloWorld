@@ -1,0 +1,22 @@
+{
+  "name": "Auto_login",
+  "description": "Auto login&out for ABCer",
+  "version": "0.2",
+  "background": {"scripts":["background.js"]},
+  "manifest_version": 2,
+  "permissions":[
+  "http://*/*",
+  "http://web.abc/",
+  "http://kfzxsoi.zh.abc/",
+  "activeTab",
+  "tabs"],
+  
+  
+  "content_scripts":[
+	  {
+		  "matches":["http://kfzxsoi.zh.abc/*"],
+		  "js":["clickBtn.js"]
+	  }
+  
+  ]
+}
